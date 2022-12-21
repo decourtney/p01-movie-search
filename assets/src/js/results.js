@@ -21,7 +21,6 @@ $(function ()
         // Display Add to list button; More Trivia button
         let favorites = getSessionStorage()[0].favorites;
 
-
         favorites.forEach((element, index) =>
         {
             let active;
@@ -47,32 +46,38 @@ $(function ()
                             $("<br>"),
                             $("<h3>", { "class": "text-gray-900 text-xl leading-tight font-medium mb-2" }).text(`${element.plot}`),
                             $("<br>"),
-                            $("<div>", { "id": "ratings", "class": "flex flex-col md:flex-row" }),
-                            $("<span>", { "class": "px-4 py-2 rounded-full text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease" }).text(`${element.genre}`),
+                            $("<div>", { "id": `ratings-card-${index}`, "class": "flex flex-col md:flex-row" }),
+                            $("<div>", { "id": `genre-${index}`, "class": "flex flex-row relative mb-5" }),
+                            $("<div>", { "id": `#review-link-${index}`, "class": "flex flex-col" })
                         )
                     )
                 )
             )
 
-            element.ratings.forEach(element =>
+            element.ratings.forEach(rating =>
             {
-                $("#ratings").append(
+                $(`#ratings-card-${index}`).append(
                     $("<div>", { "class": "flex flex-col justify-between" }).append(
-                        $("<h3>", { "class": "text-gray-500 text-ls leading-tight font-medium mb-2" }).text(element.Source),
-                        $("<h3>", { "class": "text-gray-500 text-xl leading-tight font-medium mb-2" }).text(element.Value),
+                        $("<h3>", { "class": "text-gray-500 text-ls leading-tight font-medium mb-2" }).text(rating.Source),
+                        $("<h3>", { "class": "text-gray-500 text-xl leading-tight font-medium mb-2" }).text(rating.Value),
                     )
                 );
             });
 
-            // for (let i = 0; i < element.ratings.length; i++)
-            // {
-            //     $("#ratings").append(
-            //         $("<div>", { "class": "flex flex-col justify-between" }).append(
-            //             $("<h3>", { "class": "text-gray-500 text-ls leading-tight font-medium mb-2" }).text(element.ratings[i].Source),
-            //             $("<h3>", { "class": "text-gray-500 text-xl leading-tight font-medium mb-2" }).text(element.ratings[i].Value),
-            //         )
-            //     );
-            // }
+            let genres = element.genre.split(",");
+            genres.forEach(genre =>
+            {
+                $(`#genre-${index}`).append(
+                    $("<span>", { "class": "mr-1 mt-4 px-4 py-2 rounded-full text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max" }).text(`${genre}`)
+                );
+            });
+
+            if (element.review != "")
+            {
+                $(`#review-link-${index}`).append(
+                    $("<a>", { "class": "text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out", "href": `${element.review.url}`, "target": "_blank" }).text("New York Times Review")
+                );
+            }
         });
 
     }
@@ -230,44 +235,3 @@ $(function ()
 
     displayMovieInfo();
 });
-
-{/* <div id="favorites-carousel" class="carousel slide relative" data-bs-ride="carousel">
-    <div class="carousel-inner relative w-full overflow-hidden">
-        <div class="carousel-item active relative float-left w-full">
-            <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(15).jpg" class="block w-full"
-                alt="..." />
-            <div class="carousel-caption hidden md:block absolute text-center">
-                <h5 class="text-xl">First slide label</h5>
-                <p>Some representative placeholder content for the first slide.</p>
-            </div>
-        </div>
-        <div class="carousel-item relative float-left w-full">
-            <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(22).jpg" class="block w-full"
-                alt="..." />
-            <div class="carousel-caption hidden md:block absolute text-center">
-                <h5 class="text-xl">Second slide label</h5>
-                <p>Some representative placeholder content for the second slide.</p>
-            </div>
-        </div>
-        <div class="carousel-item relative float-left w-full">
-            <img src="https://mdbootstrap.com/img/Photos/Slides/img%20(23).jpg" class="block w-full"
-                alt="..." />
-            <div class="carousel-caption hidden md:block absolute text-center">
-                <h5 class="text-xl">Third slide label</h5>
-                <p>Some representative placeholder content for the third slide.</p>
-            </div>
-        </div>
-    </div>
-    <button
-        class="carousel-control-prev absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline left-0"
-        type="button" data-bs-target="#favorites-carousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon inline-block bg-no-repeat" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button
-        class="carousel-control-next absolute top-0 bottom-0 flex items-center justify-center p-0 text-center border-0 hover:outline-none hover:no-underline focus:outline-none focus:no-underline right-0"
-        type="button" data-bs-target="#favorites-carousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon inline-block bg-no-repeat" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div> */}
