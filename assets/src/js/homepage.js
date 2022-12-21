@@ -14,7 +14,8 @@ $(function ()
     // Global Variables
     let omdbKey = "3e723361";
     let nytimesKey = "Wv8CqWp1AwfoFBw2eqi5iK83OjGy3A7N";
-    let triviaURL = "./trivia.html";
+    let triviaURL = "./assets/src/html/trivia.html";
+    let resultsURL = "./assets/src/html/results.html"
 
 
     function checkForSessionProfile()
@@ -79,9 +80,33 @@ $(function ()
         setSessionStorage(storedProfile.name, "currentProfile");
     }
 
-    function displayProfileMovieCarousel()
+    function displayFavorites()
     {
-        // Load movies from list stored with the users profile
+        movieInfoEl.append(
+            $("<div>", { "class": "p-6 shadow-lg rounded-lg bg-gray-100 text-gray-700" }).append(
+                $("<h2>", { "class": "font-semibold text-3xl mb-5 text-center" }).text(favorites[0].name),
+                $("<hr>", { "class": "my-6 border-gray-300" }),
+                $("<div>", { "class": "flex flex-col md:flex-row justify-center" }).append(
+                    $("<div>", { "class": "flex flex-col md:flex-row md:max-w-4xl rounded-l-lg bg-white shadow-lg" }).append(
+                        $("<img>", { "class": "w-full h-auto md:h-auto md:w-96 object-cover rounded-t-lg md:rounded-none md:rounded-l-lg", "src": favorites[0].poster, "alt": `${favorites[0].name} Poster` })
+                    ),
+                    $("<div>", { "class": "block p-6 rounded-r-lg shadow-lg bg-white md:w-96" }).append(
+                        $("<div>", { "class": "flex flex-row justify-between" }).append(
+                            $("<h3>", { "class": "text-gray-700 text-lg leading-tight font-medium mb-2" }).text(`${favorites[0].year} \u2022 ${favorites[0].rated}`),
+                            $("<div>", { "class": "flex flex-col" }).append(
+                                $("<h3>", { "class": "text-gray-700 text-lg leading-tight font-medium mb-2 text-center" }).text(`IMDB`),
+                                $("<h3>", { "class": "text-gray-700 text-lg leading-tight font-medium mb-2 text-center" }).text(`${favorites[0].imdbRating}`)
+                            )
+                        ),
+                        $("<br>"),
+                        $("<h3>", { "class": "text-gray-900 text-xl leading-tight font-medium mb-2" }).text(`${favorites[0].plot}`),
+                        $("<br>"),
+                        $("<div>", { "id": "ratings", "class": "flex flex-col md:flex-row" }),
+                        $("<span>", { "class": "px-4 py-2 rounded-full text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease" }).text(`${favorites[0].genre}`),
+                    )
+                )
+            )
+        )
     }
 
     function displayListOfMovies(value)
@@ -305,12 +330,8 @@ $(function ()
     movieNotFoundModalEl.on("click", ".close", function () { movieNotFoundModalEl.css("display", "none"); });
     $(window).on("click", function (event) { if (event.target == movieNotFoundModalEl) { movieNotFoundModalEl.css("display", "none"); }; });
     $("#load-trivia").on("click", function () { window.location = triviaURL });
-    $("#load-results").on("click", loadResults);
+    $("#load-results").on("click", function () { window.location = resultsURL });
 
     checkForSessionProfile();
-
-    let temp = document.getElementById("heading");
-
-    temp.appendChild(document.createElement("p"))
 });
 

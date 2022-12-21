@@ -2,7 +2,8 @@
   "dependencies": {
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",
-    "tailwindcss": "^3.2.4"
+    "tailwindcss": "^3.2.4",
+    "tw-elements": "^1.0.0-alpha13"
   },
   "scripts": {
     "build-css": "tailwindcss build -i ./assets/src/css/instyle.css -o ./assets/dst/css/outstyle.css",
