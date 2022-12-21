@@ -20,6 +20,7 @@ $(function ()
         // Displays all movie info
         // Display Add to list button; More Trivia button
         let favorites = getSessionStorage()[0].favorites;
+        console.log(favorites)
 
         favorites.forEach((element, index) =>
         {
@@ -27,6 +28,9 @@ $(function ()
             if (index == 0)
             {
                 active = "active";
+            } else
+            {
+                active = ""
             }
             $(".carousel-inner").append(
                 $("<div>", { "class": `carousel-item ${active} float-left w-full` }).append($("<h2>", { "class": "font-semibold text-3xl mb-5 text-center" }).text(element.name),
@@ -48,11 +52,20 @@ $(function ()
                             $("<br>"),
                             $("<div>", { "id": `ratings-card-${index}`, "class": "flex flex-col md:flex-row" }),
                             $("<div>", { "id": `genre-${index}`, "class": "flex flex-row relative mb-5" }),
-                            $("<div>", { "id": `#review-link-${index}`, "class": "flex flex-col" })
+                            $("<div>", { "id": `review-link-${index}`, "class": "flex flex-col" })
                         )
                     )
                 )
             )
+
+            if (element.review != "")
+            {
+                $(`#review-link-${index}`).append(
+                    $("<button>", { "type": "button", "class": "inline-block px-6 py-2.5 bg-transparent text-blue-600 font-medium text-xs leading-tight uppercase rounded hover:bg-gray-100 focus:text-blue-700 focus:bg-gray-100 focus:outline-none focus:ring-0 active:bg-gray-200 active:text-blue-800 transition duration-300 ease-in-out" }).append(
+                        $("<a>", { "class": "text-lg text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out", "href": `${element.review.url}`, "target": "_blank" }).text("New York Times Review")
+                    )
+                );
+            }
 
             element.ratings.forEach(rating =>
             {
@@ -71,13 +84,6 @@ $(function ()
                     $("<span>", { "class": "mr-1 mt-4 px-4 py-2 rounded-full text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max" }).text(`${genre}`)
                 );
             });
-
-            if (element.review != "")
-            {
-                $(`#review-link-${index}`).append(
-                    $("<a>", { "class": "text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out", "href": `${element.review.url}`, "target": "_blank" }).text("New York Times Review")
-                );
-            }
         });
 
     }
