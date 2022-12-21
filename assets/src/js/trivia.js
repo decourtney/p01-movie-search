@@ -14,7 +14,7 @@ $(function ()
     // Global Variables
     let omdbKey = "3e723361";
     let nytimesKey = "Wv8CqWp1AwfoFBw2eqi5iK83OjGy3A7N";
-    let homeURL = "./apiTest.html"
+    let homeURL = "../../../index.html"
     let triviaQAs = ["Best Gun-Fu Movie;~John Wick;John Wick: Chapter 2;John Wick: Chapter 3", "End of Line"];
     let index;
 
