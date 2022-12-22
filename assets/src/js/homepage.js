@@ -8,10 +8,12 @@ $(function ()
     let movieNotFoundModalEl = $("#errorModal");
     let modalButtonEl = $("#myBtn");
     let loginButtonEl = $("#login-button");
+    let dismissModalEl = $("#dismiss-loginModal");
     let registerButtonEl = $("#register-button");
     let loginErrorEl = $("#login-error");
     let usernameInputEl = $("#username");
     let passwordInputEl = $("#password");
+    let carouselItemsEl = $("#carousel-items");
 
     // Global Variables
     let omdbKey = "3e723361";
@@ -68,17 +70,20 @@ $(function ()
 
         // Use session profile to reference localStorage
         setSessionStorage(storedProfile[0].name, "currentProfile");
+
         addDefaultMovie();
-        $("#dismiss-loginModal").trigger("click");
+        dismissModalEl.trigger("click");
         displayFavorites();
     }
 
-    function addDefaultMovie(){
+    function addDefaultMovie()
+    {
         requestAPI(`http://www.omdbapi.com/?t=${defaultMovie}&type=movie&r=json&apikey=${omdbKey}`, createMovieObj);
     }
 
     function displayFavorites()
     {
+        carouselItemsEl.empty();
         let favorites = getSessionStorage()[0].favorites;
 
         // Need to clear the whole thing before updating
@@ -93,7 +98,8 @@ $(function ()
             {
                 active = ""
             }
-            $(".carousel-inner").append(
+
+            carouselItemsEl.append(
                 $("<div>", { "class": `carousel-item ${active} float-left w-full` }).append($("<h2>", { "class": "font-semibold text-3xl mb-5 text-center" }).text(element.name),
                     $("<hr>", { "class": "my-6 border-gray-300" }),
                     $("<div>", { "class": "flex flex-col md:flex-row justify-center" }).append(
@@ -159,9 +165,14 @@ $(function ()
         for (let i = 0; i < listOfMovies.length; i++)
         {
             movieListEl.append(
-                $("<br>"),
-                $("<button>", { "id": "movie-button" }).text(listOfMovies[i].Year + " - " + listOfMovies[i].Title)
+                $("<li>", { "class": "px-6 py-2 border-b border-gray-200 w-full rounded-t-lg" }).append(
+                    $("<button>", { "id": "movie-button" }).text(listOfMovies[i].Year + " - " + listOfMovies[i].Title)
+                )
             )
+            // movieListEl.append(
+            //     $("<br>"),
+            //     $("<button>", { "id": "movie-button" }).text(listOfMovies[i].Year + " - " + listOfMovies[i].Title)
+            // )
         }
     }
 
@@ -251,7 +262,7 @@ $(function ()
                 }
             }
 
-            profile.favorites.push(obj);
+            profile.favorites.unshift(obj);
 
             // Now that the movie is added we have to reach out to nytimes for the review link
             requestAPI(`https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=${obj.name.split(" ").join("+")}&api-key=${nytimesKey}`, addReviewToMovieObj);
@@ -367,14 +378,6 @@ $(function ()
             createUserProfile(uname, pword);
         }
     })
-
-    // Homepage on(click/submit) events
-    // on click for movie carousel/watchlist cards to load movie info into results page
-    // on click for Starting the Trivia Game
-
-    // Global on(click/submit) events
-    // on click for Login
-    // on click for Home
 
 
     modalButtonEl.on("click", function () { movieNotFoundModalEl.css("display", "block"); });
