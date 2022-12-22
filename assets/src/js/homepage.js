@@ -21,7 +21,7 @@ $(function ()
     function checkForSessionProfile()
     {
         // We need a profile to work with so upon load/refresh check for an active profile
-        if (!getSessionStorage("currentProfile"))
+        if (!getSessionStorage())
         {
             // If no active profile then create or get the default profile
             (!getLocalStorage("Player 1")) ? createUserProfile("Player 1", "") : logInProfile("Player 1", "")
@@ -78,35 +78,78 @@ $(function ()
 
         // Use session profile to reference localStorage
         setSessionStorage(storedProfile.name, "currentProfile");
+        displayFavorites();
     }
 
     function displayFavorites()
     {
-        movieInfoEl.append(
-            $("<div>", { "class": "p-6 shadow-lg rounded-lg bg-gray-100 text-gray-700" }).append(
-                $("<h2>", { "class": "font-semibold text-3xl mb-5 text-center" }).text(favorites[0].name),
-                $("<hr>", { "class": "my-6 border-gray-300" }),
-                $("<div>", { "class": "flex flex-col md:flex-row justify-center" }).append(
-                    $("<div>", { "class": "flex flex-col md:flex-row md:max-w-4xl rounded-l-lg bg-white shadow-lg" }).append(
-                        $("<img>", { "class": "w-full h-auto md:h-auto md:w-96 object-cover rounded-t-lg md:rounded-none md:rounded-l-lg", "src": favorites[0].poster, "alt": `${favorites[0].name} Poster` })
-                    ),
-                    $("<div>", { "class": "block p-6 rounded-r-lg shadow-lg bg-white md:w-96" }).append(
-                        $("<div>", { "class": "flex flex-row justify-between" }).append(
-                            $("<h3>", { "class": "text-gray-700 text-lg leading-tight font-medium mb-2" }).text(`${favorites[0].year} \u2022 ${favorites[0].rated}`),
-                            $("<div>", { "class": "flex flex-col" }).append(
-                                $("<h3>", { "class": "text-gray-700 text-lg leading-tight font-medium mb-2 text-center" }).text(`IMDB`),
-                                $("<h3>", { "class": "text-gray-700 text-lg leading-tight font-medium mb-2 text-center" }).text(`${favorites[0].imdbRating}`)
-                            )
+        let favorites = getSessionStorage()[0].favorites;
+
+        // Need to clear the whole thing before updating
+
+        favorites.forEach((element, index) =>
+        {
+            let active;
+            if (index == 0)
+            {
+                active = "active";
+            } else
+            {
+                active = ""
+            }
+            $(".carousel-inner").append(
+                $("<div>", { "class": `carousel-item ${active} float-left w-full` }).append($("<h2>", { "class": "font-semibold text-3xl mb-5 text-center" }).text(element.name),
+                    $("<hr>", { "class": "my-6 border-gray-300" }),
+                    $("<div>", { "class": "flex flex-col md:flex-row justify-center" }).append(
+                        $("<div>", { "class": "flex flex-col md:flex-row md:max-w-4xl rounded-l-lg bg-white shadow-lg" }).append(
+                            $("<img>", { "class": "w-full h-auto md:h-auto md:w-96 object-cover rounded-t-lg md:rounded-none md:rounded-l-lg", "src": element.poster, "alt": `${element.name} Poster` })
                         ),
-                        $("<br>"),
-                        $("<h3>", { "class": "text-gray-900 text-xl leading-tight font-medium mb-2" }).text(`${favorites[0].plot}`),
-                        $("<br>"),
-                        $("<div>", { "id": "ratings", "class": "flex flex-col md:flex-row" }),
-                        $("<span>", { "class": "px-4 py-2 rounded-full text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max cursor-pointer active:bg-gray-300 transition duration-300 ease" }).text(`${favorites[0].genre}`),
+                        $("<div>", { "class": "block p-6 rounded-r-lg shadow-lg bg-white md:w-96" }).append(
+                            $("<div>", { "class": "flex flex-row justify-between" }).append(
+                                $("<h3>", { "class": "text-gray-700 text-lg leading-tight font-medium mb-2" }).text(`${element.year} \u2022 ${element.rated}`),
+                                $("<div>", { "class": "flex flex-col" }).append(
+                                    $("<h3>", { "class": "text-gray-700 text-lg leading-tight font-medium mb-2 text-center" }).text(`IMDB`),
+                                    $("<h3>", { "class": "text-gray-700 text-lg leading-tight font-medium mb-2 text-center" }).text(`${element.imdbRating}`)
+                                )
+                            ),
+                            $("<br>"),
+                            $("<h3>", { "class": "text-gray-900 text-xl leading-tight font-medium mb-2" }).text(`${element.plot}`),
+                            $("<br>"),
+                            $("<div>", { "id": `ratings-card-${index}`, "class": "flex flex-col md:flex-row" }),
+                            $("<div>", { "id": `genre-${index}`, "class": "flex flex-row relative mb-5" }),
+                            $("<div>", { "id": `review-link-${index}`, "class": "flex flex-col" })
+                        )
                     )
                 )
             )
-        )
+
+            if (element.review != "")
+            {
+                $(`#review-link-${index}`).append(
+                    $("<button>", { "type": "button", "class": "inline-block px-6 py-2.5 bg-transparent text-blue-600 font-medium text-xs leading-tight uppercase rounded hover:bg-gray-100 focus:text-blue-700 focus:bg-gray-100 focus:outline-none focus:ring-0 active:bg-gray-200 active:text-blue-800 transition duration-300 ease-in-out" }).append(
+                        $("<a>", { "class": "text-lg text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out", "href": `${element.review.url}`, "target": "_blank" }).text("New York Times Review")
+                    )
+                );
+            }
+
+            element.ratings.forEach(rating =>
+            {
+                $(`#ratings-card-${index}`).append(
+                    $("<div>", { "class": "flex flex-col justify-between" }).append(
+                        $("<h3>", { "class": "max-w-sm text-gray-500 text-ls leading-tight font-medium mb-2" }).text(rating.Source),
+                        $("<h3>", { "class": "text-gray-500 text-xl leading-tight font-medium mb-2" }).text(rating.Value),
+                    )
+                );
+            });
+
+            let genres = element.genre.split(",");
+            genres.forEach(genre =>
+            {
+                $(`#genre-${index}`).append(
+                    $("<span>", { "class": "mr-1 mt-4 px-4 py-2 rounded-full text-gray-500 bg-gray-200 font-semibold text-sm flex align-center w-max" }).text(`${genre}`)
+                );
+            });
+        });
     }
 
     function displayListOfMovies(value)
@@ -199,7 +242,7 @@ $(function ()
     function addToFavorites(obj)
     {
         // Add the selected movie object to the profile favorites
-        let profile = getSessionStorage("currentProfile")[0];
+        let profile = getSessionStorage()[0];
 
         // Make sure the movie title doesn
         if (profile.favorites.length > 0)
@@ -222,6 +265,7 @@ $(function ()
         }
 
         setLocalStorage(profile, profile.name);
+        displayFavorites();
     }
 
     function addReviewToMovieObj(value)
@@ -230,7 +274,7 @@ $(function ()
         {
             return;
         }
-        let profile = getSessionStorage("currentProfile")[0];
+        let profile = getSessionStorage()[0];
 
         // Because the movieobj is already stored we have to iterate through the stored movies
         // And match the nytimes obj title with the stored movie title and add the review to that movieobj
@@ -244,10 +288,10 @@ $(function ()
         })
     }
 
-    function getSessionStorage(storeName)
+    function getSessionStorage()
     {
         // After login - should use the current profile reference to get from localStorage
-        return getLocalStorage(JSON.parse(sessionStorage.getItem(storeName)));
+        return getLocalStorage(JSON.parse(sessionStorage.getItem("currentProfile")));
     }
 
     function setSessionStorage(obj, storename)
@@ -333,5 +377,6 @@ $(function ()
     $("#load-results").on("click", function () { window.location = resultsURL });
 
     checkForSessionProfile();
+    displayFavorites();
 });
 

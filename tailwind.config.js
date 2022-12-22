@@ -5,7 +5,20 @@ module.exports = {
     './index.html'
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#E0876A",
+        secondary: "#F4A688",
+        tertiary: "#d9b38c",
+        borderColor: "#A2836E",
+        mainFontColor: "#FFF2DF",
+        linkFontColor: "#FBEFCC",
+        background: "#674D3C",
+      },
+      fontFamily: {
+        body: ["Audiowide"],
+      },
+    },
   },
-  plugins: [require('node-modules/tw-elements/dist/plugin')],
+  plugins: [require('tw-elements/dist/plugin')],
 }

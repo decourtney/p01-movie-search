@@ -18,6 +18,7 @@ $(function ()
     let triviaQAs = ["Best Gun-Fu Movie;~John Wick;John Wick: Chapter 2;John Wick: Chapter 3", "End of Line"];
     let index;
 
+
     function getTriviaQA()
     {
         // Still need to figure out how to generate QAs - either a prefab list or finding another API
