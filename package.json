@@ -1,4 +1,11 @@
 {
+  "name": "movienightgame",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "autoprefixer": "^10.4.13",
     "postcss": "^8.4.20",
@@ -8,5 +15,12 @@
   "scripts": {
     "build-css": "tailwindcss build -i ./assets/src/css/instyle.css -o ./assets/dst/css/outstyle.css",
     "watch-css": "tailwindcss build -i ./assets/src/css/instyle.css -o ./assets/dst/css/outstyle.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisEliGirard/movienightGame.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ChrisEliGirard/movienightGame/issues"
   }
 }

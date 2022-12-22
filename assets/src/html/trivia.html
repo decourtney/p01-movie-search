@@ -10,29 +10,106 @@
     <title>Trivia</title>
 </head>
 
-<body>
-    <div>
-        <h1>This is the trivia page</h1>
-        <button type="button" id="home-button">Back to Home Page</button>
-    </div>
+<body class="text-mainFontColor font-body bg-background">
 
-    <br>
+    <section>
+        <header class="lg:px-16 px-6 bg-secondary flex flex-wrap items-center lg:py-0 py-2">
+            <div class="flex-1 flex justify-between items-center">
+                <a href="#"><strong class="text-2xl text-white shadow-sm">Not Another Movie Generator</strong></a>
+            </div>
 
-    <div>
-        <button type="button" id="start-trivia">Start Trivia</button>
-    </div>
+            <label for="menu-toggle" class="pointer-cursor lg:hidden block"><svg class="fill-current text-mainFontColor"
+                    xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                    <title>menu</title>
+                    <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"></path>
+                </svg></label>
+            <input class="hidden" type="checkbox" id="menu-toggle" />
 
-    <br>
+            <div class="hidden lg:flex lg:items-center lg:w-auto w-full" id="menu">
+                <nav>
+                    <ul class="lg:flex items-center justify-between text-base text-white pt-4 lg:pt-0">
+                        <li class="lg:p-4 py-0 px-0 block border-b-2 border-transparent hover:border-white">
+                            <div class="flex justify-center">
+                                <div class="mb-0 xl:w-96">
+                                    <div class="input-group relative flex flex-wrap items-stretch w-full mb-0">
+                                        <input type="search"
+                                            class="form-control relative flex-1 min-w-0 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-gray-700 focus:outline-none"
+                                            placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
+                                        <button
+                                            class="btn px-6 py-2.5 bg-background text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center"
+                                            type="button" id="button-addon2">
+                                            <svg aria-hidden="true" focusable="false" data-prefix="fas"
+                                                data-icon="search" class="w-4" role="img"
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                <path fill="currentColor"
+                                                    d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-white"
+                                id="home">Home</a></li>
+                        <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-white"
+                                id="television">Television</a></li>
+                        <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-white"
+                                id="movies">Movies</a></li>
+                        <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-white lg:mb-0 mb-2"
+                                id="login">Login</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+    </section>
+    <!--end nav-->
+    <main>
+        <section>
+            <div class="div bg-tertiary m-4 py-12 grid place-content-center">
+                <a class="text-2xl font-extrabold">Trivia Time!</a>
+            </div>
+        </section>
 
-    <div id="trivia-section">
-        <div id="question"></div>
-        <div id="answers"></div>
-        <div id="trivia-buttons"></div>
+        <section class="bg-tertiary m-4 px-2 py-8 grid place-content-center">
+            <section class="my-2" id="movie-poster">
+                <img src="../img/Placeholder.png" height="300" alt="picture of johnwick action movie">
+            </section>
+
+            <div class="container" id="quiz">
+                <div>
+                    <h2 class="my-2 px-2 py-4 bg-background text-center" id="question">Question Placeholder</h2>
+                    <ul>
+                        <li class="bg-secondary">
+                            <input type="radio" name="answer" id="a" class="answer">
+                            <label for="a" id="a_text">answer</label>
+                        </li>
+                        <li class="bg-primary">
+                            <input type="radio" name="answer" id="b" class="answer">
+                            <label for="b" id="a_text">answer</label>
+                        </li>
+                        <li class="bg-secondary">
+                            <input type="radio" name="answer" id="c" class="answer">
+                            <label for="c" id="a_text">answer</label>
+                        </li>
+
+                        <li class="bg-primary">
+                            <input type="radio" name="answer" id="d" class="answer">
+                            <label for="d" id="a_text">answer</label>
+                        </li>
+                    </ul>
+
+                </div>
+                <button class="bg-background my-2 p-2 rounded" id="submit">Submit</button>
+            </div>
+        </section>
+    </main>
     </div>
 </body>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="../../../node_modules/tw-elements/dist/js/index.min.js"></script>
 <script src="../js/trivia.js"></script>
 
 </html>
