@@ -8,6 +8,8 @@ $(function ()
     let movieNotFoundModalEl = $("#errorModal");
     let modalButtonEl = $("#myBtn");
     let loginButtonEl = $("#login-button");
+    let registerButtonEl = $("#register-button");
+    let loginErrorEl = $("#login-error");
     let usernameInputEl = $("#username");
     let passwordInputEl = $("#password");
 
@@ -16,6 +18,7 @@ $(function ()
     let nytimesKey = "Wv8CqWp1AwfoFBw2eqi5iK83OjGy3A7N";
     let triviaURL = "./assets/src/html/trivia.html";
     let resultsURL = "./assets/src/html/results.html"
+    let defaultMovie = "The Horse In Motion"
 
 
     function checkForSessionProfile()
@@ -28,18 +31,8 @@ $(function ()
         }
     }
 
-    function displayLoginModal()
-    {
-        // When the login button is clicked - Display modal with username/password fields; Login button; Create Account button; Cancel button
-        // User completes both fields and clicks one of the buttons
-    }
-
     function createUserProfile(uname, pword)
     {
-        // When Create Account button is clicked: 
-        // Check local storage and if the account already exits then display message indicating
-        // Else create a user object and send to storage with the account name as the store name
-        // Assuming creation of new user then log the user in after account creation
         let profile = {
             name: "",
             password: "",
@@ -55,7 +48,7 @@ $(function ()
         } else
         {
             // Reload creation modal and display error message
-            console.log("Username already in use");
+            loginErrorEl.show().delay(3000).fadeOut().text(`Username already in use`);
             return;
         }
 
@@ -64,21 +57,24 @@ $(function ()
 
     function logInProfile(uname, pword)
     {
-        // Called when Login Button is clicked or createUserProfile function calls
-        // Username/password is used to get that users local stored object - store name should match the username
-        // The user object will need to be loaded into sessionStorage to persist throughout the pages
-        let storedProfile = getLocalStorage(uname)[0];
-
-        if (!storedProfile || storedProfile.password !== pword)
+        let storedProfile = getLocalStorage(uname);
+        console.log(storedProfile)
+        if (!storedProfile || storedProfile[0].password !== pword)
         {
             // Reload login modal with error message
-            console.log(`Wrong username/password`)
+            loginErrorEl.show().delay(3000).fadeOut().text(`Wrong username/password`);
             return;
         }
 
         // Use session profile to reference localStorage
-        setSessionStorage(storedProfile.name, "currentProfile");
+        setSessionStorage(storedProfile[0].name, "currentProfile");
+        addDefaultMovie();
+        $("#dismiss-loginModal").trigger("click");
         displayFavorites();
+    }
+
+    function addDefaultMovie(){
+        requestAPI(`http://www.omdbapi.com/?t=${defaultMovie}&type=movie&r=json&apikey=${omdbKey}`, createMovieObj);
     }
 
     function displayFavorites()
@@ -351,6 +347,17 @@ $(function ()
     });
 
     loginButtonEl.on("click", function ()
+    {
+        let uname = usernameInputEl.val();
+        let pword = passwordInputEl.val();
+
+        if (uname && pword)
+        {
+            logInProfile(uname, pword);
+        }
+    })
+
+    registerButtonEl.on("click", function ()
     {
         let uname = usernameInputEl.val();
         let pword = passwordInputEl.val();
