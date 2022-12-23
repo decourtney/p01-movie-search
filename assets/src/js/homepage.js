@@ -158,34 +158,16 @@ $(function ()
         let listOfMovies = value.Search
 
         // Display list of movies for the user to select from
+        movieListEl.append($("<ul>", { "class": "bg-white rounded-lg border border-gray-200 w-96 text-gray-900 text-left" }));
         for (let i = 0; i < listOfMovies.length; i++)
         {
-            movieListEl.append(
+            movieListEl.children("ul").append(
+
                 $("<li>", { "class": "px-6 py-2 border-b border-gray-200 w-full rounded-t-lg" }).append(
                     $("<button>", { "id": "movie-button" }).text(listOfMovies[i].Year + " - " + listOfMovies[i].Title)
                 )
             )
         }
-    }
-
-    // Displays API movie-not-found errors (nytimes needs further testing)
-    function displayErrorModal(msg)
-    {
-        $("#error-modal-content").empty();
-
-        $("#error-modal-content").append(
-            $("<button>", { "type": "button", "class": "btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline", "data-bs-dismiss": "modal", "aria-label":"Close" }),
-            $("<span>", { "class": "close" }).html("&times;"),
-            $("<p>").text(msg),
-            $("<div>", { "class":"modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md"})
-        );
-
-        movieNotFoundModalEl.addClass("show").attr({ "style": "display: block;", "role": "dialog" });
-
-        $("body").append(
-            $("<div>", { "class": "modal-backdrop fade show" }));
-
-        $("body").addClass("modal-open").attr({ "style": "overflow: hidden; padding-right: 17px;" });
     }
 
     // When a user searches for a movie use the '?s=' query parameter with callback to displayListOfMovies()
@@ -284,6 +266,13 @@ $(function ()
                 setLocalStorage(profile, profile.name);
             }
         })
+    }
+
+    // Displays API movie-not-found errors (nytimes needs further testing)
+    function displayErrorModal(msg)
+    {
+        $("#error-modal .modal-body").text(msg);
+        $("#error-modal").modal("show");
     }
 
     function getSessionStorage()
