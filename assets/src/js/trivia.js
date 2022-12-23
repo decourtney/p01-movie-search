@@ -9,7 +9,8 @@ $(function ()
     let questionEl = $("#question");
     let answersEl = $("#answers");
     let triviaSectionEl = $("#trivia-section");
-    let triviaButtonsEl = $("#trivia-buttons")
+    let triviaButtonsEl = $("#trivia-buttons");
+    let timerEl = $("#timer");
 
     // Global Variables
     let omdbKey = "3e723361";
@@ -17,6 +18,7 @@ $(function ()
     let homeURL = "../../../index.html"
     let index;
     let triviaObjs = []
+    let triviaTimer;
 
 
     function requestTriviaQA()
@@ -82,21 +84,23 @@ $(function ()
         if (index < triviaObjs.length)
         {
             questionEl.append($("<h2>", { "id": "question", "class": "my-2 px-2 py-4 bg-background" }).text(triviaObjs[index].question));
+            answersEl.append($("<ul>", { "class": "bg-white rounded-lg border border-gray-200 w-96 text-gray-900" }))
 
             for (let i = 0; i < triviaObjs[index].answers.length; i++)
             {
                 if (triviaObjs[index].answers[i].split("", 1).toString() === "~")
                 {
-                    answersEl.append($("<li>", { "class": "correct block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" }).text(triviaObjs[index].answers[i].slice(1, triviaObjs[index].answers[i].length)));
+                    answersEl.children("ul").append($("<li>", { "class": "correct block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" }).text(triviaObjs[index].answers[i].slice(1, triviaObjs[index].answers[i].length)));
                 } else
                 {
-                    answersEl.append($("<li>", { "class": "block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" }).text(triviaObjs[index].answers[i]));
+                    answersEl.children("ul").append($("<li>", { "class": "block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" }).text(triviaObjs[index].answers[i]));
                 }
             }
-
         } else
         {
-            // Reached the end of the QAs - Stop timer and end game
+            console.log("end")
+            clearInterval(triviaTimer);
+            timerEl.text("00");
         }
 
         index++;
@@ -104,19 +108,30 @@ $(function ()
 
     function runTimer()
     {
-        // If timer runs out - displayCorrectAnswer()
-        console.log("Timer has started");
+        let timeLeft = 30;
+        triviaTimer = setInterval(function ()
+        {
+            if (timeLeft > 0)
+            {
+                timerEl.text(timeLeft);
+                timeLeft--;
+            } else
+            {
+                clearInterval(triviaTimer);
+                timerEl.text("00");
+            }
+        }, 1000);
     }
 
     function checkAnswer(event)
     {
         let answer = event.target;
-        
+
         if (answer.matches(".correct") === true)
         {
             // Do something when correct answer is selected
             console.log("Correct answer selected");
-            
+
         } else
         {
             // Do something when incorrect answer is selcted
@@ -286,5 +301,4 @@ $(function ()
     triviaSectionEl.on("click", "#next-question", displayNextQA);
 
     requestTriviaQA();
-
 });
