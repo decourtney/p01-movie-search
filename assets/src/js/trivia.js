@@ -15,18 +15,52 @@ $(function ()
     let omdbKey = "3e723361";
     let nytimesKey = "Wv8CqWp1AwfoFBw2eqi5iK83OjGy3A7N";
     let homeURL = "../../../index.html"
-    let triviaQAs = ["Best Gun-Fu Movie;~John Wick;John Wick: Chapter 2;John Wick: Chapter 3", "End of Line"];
     let index;
+    let triviaObjs = []
 
 
-    function getTriviaQA()
+    function requestTriviaQA()
     {
-        // Still need to figure out how to generate QAs - either a prefab list or finding another API
+        $.ajax({
+            url: requestUrl = "https://opentdb.com/api.php?amount=10&category=11",
+            type: "GET",
+            timeout: 5000,
+            success: function (data)
+            {
+                if (data.response_code === 0)
+                {
+                    // Callback function
+                    createTriviaObj(data);
+                }
+            },
+            error: function (xhr, status, error)
+            {
+                // Needs error handling work
+                // displayErrorModal(xhr.status);
+            }
+        });
     }
 
-    function displayStartButton()
+    function createTriviaObj(data)
     {
-        // Page should load with simple list of rules and Start button
+        data.results.forEach(result =>
+        {
+
+            let triviaQA = {
+                question: result.question.replaceAll("&quot;", "\"").replaceAll("&#039;", "\'").replaceAll("&hellip;", "...").replaceAll("&ldquo;", "`"),
+                answers: ["~" + result.correct_answer.replaceAll("&quot;", "\"").replaceAll("&#039;", "\'").replaceAll("&hellip;", "...").replaceAll("&ldquo;", "`")],
+            }
+
+            result.incorrect_answers.forEach(ans =>
+            {
+                triviaQA.answers.push(ans.replaceAll("&quot;", "\"").replaceAll("&#039;", "\'").replaceAll("&hellip;", "...").replaceAll("&ldquo;", "`"));
+            });
+
+            triviaQA.answers = triviaQA.answers.sort((a, b) => 0.5 - Math.random())
+            triviaObjs.push(triviaQA);
+        });
+
+        startTrivia();
     }
 
     function startTrivia()
@@ -45,20 +79,18 @@ $(function ()
         answersEl.empty("ul");
         triviaButtonsEl.empty("button");
 
-        if (index < triviaQAs.length)
+        if (index < triviaObjs.length)
         {
-            let nextQA = triviaQAs[index].split(";", triviaQAs[index].length);
-            $("<p>").appendTo(questionEl).text(nextQA[0]);
+            questionEl.append($("<h2>", { "id": "question", "class": "my-2 px-2 py-4 bg-background" }).text(triviaObjs[index].question));
 
-            for (let i = 1; i < nextQA.length; i++)
+            for (let i = 0; i < triviaObjs[index].answers.length; i++)
             {
-
-                if (nextQA[i].split("", 1).toString() === "~")
+                if (triviaObjs[index].answers[i].split("", 1).toString() === "~")
                 {
-                    $("<li>", { "class": "correct" }).text(nextQA[i].slice(1, nextQA[i].length)).appendTo(answersEl);
+                    answersEl.append($("<li>", { "class": "correct block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" }).text(triviaObjs[index].answers[i].slice(1, triviaObjs[index].answers[i].length)));
                 } else
                 {
-                    $("<li>").text(nextQA[i]).appendTo(answersEl);
+                    answersEl.append($("<li>", { "class": "block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" }).text(triviaObjs[index].answers[i]));
                 }
             }
 
@@ -78,14 +110,13 @@ $(function ()
 
     function checkAnswer(event)
     {
-        // Do something when wrong/right answer; Limit number of guesses
-        // Display hint if wrong answer
-        // Once guess limit is hit or correct answer selected then displayCorrectAnswer()
         let answer = event.target;
+        
         if (answer.matches(".correct") === true)
         {
             // Do something when correct answer is selected
             console.log("Correct answer selected");
+            
         } else
         {
             // Do something when incorrect answer is selcted
@@ -102,163 +133,148 @@ $(function ()
 
     function displayCorrectAnswer()
     {
-        // Called from checkAnswer() when correct answer is selected or from runTimer() when time runs out
-        // Highlight correct answer; Maybe display hint (remove clickability from answers)
-        // Display Next and More Info buttons
-        $("<button>", { "id": "add-favorites" }).text("Save Movie").appendTo(triviaButtonsEl);
-        $("<button>", { "id": "next-question" }).text("Next Question").appendTo(triviaButtonsEl);
+        triviaButtonsEl.empty("button");
+        answersEl.children("li").click(false);
+
+        triviaButtonsEl.append($("<button>", { "id": "next-question", "class": "inline-block mx-2 px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" }).text("Next Question"));
     }
 
-    function loadResults()
-    {
-        // Store movie title in sessionStorage
-        // Load Results page
-    }
+    // function requestAPI(url, infoCallback)
+    // {
+    //     $.ajax({
+    //         url: url,
+    //         type: "GET",
+    //         timeout: 5000,
+    //         success: function (data)
+    //         {
+    //             // OMDB returns True if a movie is found. NYTimes returns OK if found
+    //             if (data.Response == "True" || data.status == "OK")
+    //             {
+    //                 // Callback function
+    //                 infoCallback(data);
+    //             }
+    //         },
+    //         error: function (xhr, status, error)
+    //         {
+    //             // Needs error handling work
+    //             // displayErrorModal(xhr.status);
+    //         }
+    //     });
+    // }
 
-    function requestAPI(url, infoCallback)
-    {
-        $.ajax({
-            url: url,
-            type: "GET",
-            timeout: 5000,
-            success: function (data)
-            {
-                // OMDB returns True if a movie is found. NYTimes returns OK if found
-                if (data.Response == "True" || data.status == "OK")
-                {
-                    // Callback function
-                    infoCallback(data);
-                }
-            },
-            error: function (xhr, status, error)
-            {
-                // Needs error handling work
-                // displayErrorModal(xhr.status);
-            }
-        });
-    }
+    // function createMovieObj(value)
+    // {
+    //     let movieObj = {
+    //         name: value.Title,
+    //         genre: value.Genre,
+    //         rated: value.Rated,
+    //         actors: value.Actors,
+    //         year: value.Year,
+    //         ratings: value.Ratings,
+    //         plot: value.Plot,
+    //         poster: value.Poster,
+    //         metascore: value.Metascore,
+    //         imdbRating: value.imdbRating,
+    //         review: ""
+    //     };
 
-    function createMovieObj(value)
-    {
-        let movieObj = {
-            name: value.Title,
-            genre: value.Genre,
-            rated: value.Rated,
-            actors: value.Actors,
-            year: value.Year,
-            ratings: value.Ratings,
-            plot: value.Plot,
-            poster: value.Poster,
-            metascore: value.Metascore,
-            imdbRating: value.imdbRating,
-            review: ""
-        };
+    //     addToFavorites(movieObj);
+    // }
 
-        addToFavorites(movieObj);
-    }
+    // function addToFavorites(obj)
+    // {
+    //     // Add the selected movie object to the profile favorites
+    //     let profile = getSessionStorage()[0];
 
-    function addToFavorites(obj)
-    {
-        // Add the selected movie object to the profile favorites
-        let profile = getSessionStorage("currentProfile")[0];
+    //     // Make sure the movie title doesn
+    //     if (profile.favorites.length > 0)
+    //     {
+    //         for (let i = 0; i < profile.favorites.length; i++)
+    //         {
+    //             if (obj.name === profile.favorites[i].name)
+    //             {
+    //                 profile.favorites.splice(i, 1);
+    //             }
+    //         }
 
-        // Make sure the movie title doesn
-        if (profile.favorites.length > 0)
-        {
-            for (let i = 0; i < profile.favorites.length; i++)
-            {
-                if (obj.name === profile.favorites[i].name)
-                {
-                    profile.favorites.splice(i, 1);
-                }
-            }
+    //         profile.favorites.push(obj);
 
-            profile.favorites.push(obj);
+    //         // Now that the movie is added we have to reach out to nytimes for the review link
+    //         requestAPI(`https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=${obj.name.split(" ").join("+")}&api-key=${nytimesKey}`, addReviewToMovieObj);
+    //     } else
+    //     {
+    //         profile.favorites = [obj];
+    //     }
 
-            // Now that the movie is added we have to reach out to nytimes for the review link
-            requestAPI(`https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=${obj.name.split(" ").join("+")}&api-key=${nytimesKey}`, addReviewToMovieObj);
-        } else
-        {
-            profile.favorites = [obj];
-        }
+    //     setLocalStorage(profile, profile.name);
+    // }
 
-        setLocalStorage(profile, profile.name);
-    }
+    // function addReviewToMovieObj(value)
+    // {
+    //     if (value.results == null)
+    //     {
+    //         return;
+    //     }
+    //     let profile = getSessionStorage()[0];
+    //     console.log(profile.favorites)
+    //     // Because the movieobj is already stored we have to iterate through the stored movies
+    //     // And match the nytimes obj title with the stored movie title and add the review to that movieobj
+    //     profile.favorites.forEach(element =>
+    //     {
+    //         if (value.results[0].display_title === element.name)
+    //         {
+    //             element.review = value.results[0].link;
+    //             setLocalStorage(profile, profile.name);
+    //         }
+    //     })
+    // }
 
-    function addReviewToMovieObj(value)
-    {
-        if (value.results == null)
-        {
-            return;
-        }
-        let profile = getSessionStorage("currentProfile")[0];
-        console.log(profile.favorites)
-        // Because the movieobj is already stored we have to iterate through the stored movies
-        // And match the nytimes obj title with the stored movie title and add the review to that movieobj
-        profile.favorites.forEach(element =>
-        {
-            if (value.results[0].display_title === element.name)
-            {
-                element.review = value.results[0].link;
-                setLocalStorage(profile, profile.name);
-            }
-        })
-    }
+    // function getSessionStorage()
+    // {
+    //     // After login - should use the current profile reference to get from localStorage
+    //     return getLocalStorage(JSON.parse(sessionStorage.getItem("currentProfile")));
+    // }
 
-    function getSessionStorage(storeName)
-    {
-        // After login - should use the current profile reference to get from localStorage
-        return getLocalStorage(JSON.parse(sessionStorage.getItem(storeName)));
-    }
+    // function setSessionStorage(obj, storename)
+    // {
+    //     // Once data is set or updated to sessionStorage then also update/set localStorage
+    //     sessionStorage.clear();
+    //     sessionStorage.setItem(storename, JSON.stringify(obj));
+    // }
 
-    function setSessionStorage(obj, storename)
-    {
-        // Once data is set or updated to sessionStorage then also update/set localStorage
-        sessionStorage.clear();
-        sessionStorage.setItem(storename, JSON.stringify(obj));
-    }
+    // function getLocalStorage(storeName)
+    // {
+    //     let storage = JSON.parse(localStorage.getItem(storeName));
+    //     return storage;
+    // }
 
-    function getLocalStorage(storeName)
-    {
-        let storage = JSON.parse(localStorage.getItem(storeName));
-        return storage;
-    }
+    // function setLocalStorage(obj, storeName)
+    // {
+    //     let storage = JSON.parse(localStorage.getItem(storeName));
 
-    function setLocalStorage(obj, storeName)
-    {
-        let storage = JSON.parse(localStorage.getItem(storeName));
+    //     // Check if storage is null. If so then this is the first element to be added so skip to else
+    //     if (storage)
+    //     {
+    //         // Iterate through the stored objects looking for duplicate entries. If a dupe is found
+    //         // then its removed and the new instance is added.
+    //         for (let i = 0; i < storage.length; i++)
+    //         {
+    //             if (obj.name === storage[i].name)
+    //             {
+    //                 storage.splice(i, 1);
+    //             }
+    //         }
 
-        // Check if storage is null. If so then this is the first element to be added so skip to else
-        if (storage)
-        {
-            // Iterate through the stored objects looking for duplicate entries. If a dupe is found
-            // then its removed and the new instance is added.
-            for (let i = 0; i < storage.length; i++)
-            {
-                if (obj.name === storage[i].name)
-                {
-                    storage.splice(i, 1);
-                }
-            }
+    //         storage.push(obj);
+    //     } else
+    //     {
+    //         storage = [obj];
+    //     }
 
-            storage.push(obj);
-        } else
-        {
-            storage = [obj];
-        }
+    //     localStorage.setItem(storeName, JSON.stringify(storage));
+    // }
 
-        localStorage.setItem(storeName, JSON.stringify(storage));
-    }
 
-    // Trivia on(click/submit) events
-    // on click for Start button
-    // on click for Answer buttons
-    // on click for Next button
-    // on click for MoreInfo button
-
-    // Global on(click/submit) events
-    // on click for Login
-    // on click for Home
     $("#home-button").on("click", function () { window.location = homeURL; })
     $("#start-trivia").on("click", startTrivia);
     answersEl.on("click", "li", checkAnswer);
@@ -268,4 +284,7 @@ $(function ()
         requestAPI(`http://www.omdbapi.com/?t=${title}&type=movie&r=json&apikey=${omdbKey}`, createMovieObj);
     })
     triviaSectionEl.on("click", "#next-question", displayNextQA);
+
+    requestTriviaQA();
+
 });
