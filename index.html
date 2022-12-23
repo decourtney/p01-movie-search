@@ -176,11 +176,11 @@
 
         <!-- Movie List from Search -->
         <section class="align-baseline p-6">
-            <div class="flex justify-center">
-              <ul id="movie-list" class="bg-white rounded-lg border border-gray-200 w-96 text-gray-900 text-left">
-                <!-- Movie List Generated in JS -->
-              </ul>
-            </div>
+          <div class="flex justify-center">
+            <ul id="movie-list" class="bg-white rounded-lg border border-gray-200 w-96 text-gray-900 text-left">
+              <!-- Movie List Generated in JS -->
+            </ul>
+          </div>
         </section>
       </div>
 
@@ -193,7 +193,7 @@
                 d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
             </svg> Recently Viewed</h4>
 
-            
+
         </section>
 
         <!-- Favorites Carousel -->
@@ -222,8 +222,44 @@
         </section>
       </div>
 
+      <button type="button" class="px-6
+      py-2.5
+      bg-blue-600
+      text-white
+      font-medium
+      text-xs
+      leading-tight
+      uppercase
+      rounded
+      shadow-md
+      hover:bg-blue-700 hover:shadow-lg
+      focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
+      active:bg-blue-800 active:shadow-lg
+      transition
+      duration-150
+      ease-in-out" data-bs-toggle="modal" data-bs-target="#error-modal">
+        Launch demo modal
+      </button>
+
+      <!-- Error Modal -->
+      <div class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
+        id="error-modal" tabindex="-1" aria-labelledby="error-modalLabel" aria-hidden="true">
+        <div class="modal-dialog relative w-auto pointer-events-none">
+          <div id="error-modal-content"
+            class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current">
+            
+
+            <div
+              class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
+              <button type="button"
+                class="px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+                data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+
     </main>
-    </div>
+  </section>
 </body>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

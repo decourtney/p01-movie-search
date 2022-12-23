@@ -5,8 +5,7 @@ $(function ()
     // Selectors
     let movieSearchEl = $("#title-search");
     let movieListEl = $("#movie-list");
-    let movieNotFoundModalEl = $("#errorModal");
-    let modalButtonEl = $("#myBtn");
+    let movieNotFoundModalEl = $("#error-modal");
     let loginButtonEl = $("#login-button");
     let dismissModalEl = $("#dismiss-loginModal");
     let registerButtonEl = $("#register-button");
@@ -19,7 +18,6 @@ $(function ()
     let omdbKey = "3e723361";
     let nytimesKey = "Wv8CqWp1AwfoFBw2eqi5iK83OjGy3A7N";
     let triviaURL = "./assets/src/html/trivia.html";
-    let resultsURL = "./assets/src/html/results.html"
     let defaultMovie = "The Horse In Motion"
 
 
@@ -156,9 +154,7 @@ $(function ()
 
     function displayListOfMovies(value)
     {
-        // If a list is returned then display the list of returned movies as clickable elements.
-        // When selected send another requestAPI() 
-        // Else send the single returned object to requestAPI()
+        movieListEl.empty()
         let listOfMovies = value.Search
 
         // Display list of movies for the user to select from
@@ -169,32 +165,27 @@ $(function ()
                     $("<button>", { "id": "movie-button" }).text(listOfMovies[i].Year + " - " + listOfMovies[i].Title)
                 )
             )
-            // movieListEl.append(
-            //     $("<br>"),
-            //     $("<button>", { "id": "movie-button" }).text(listOfMovies[i].Year + " - " + listOfMovies[i].Title)
-            // )
         }
     }
 
     // Displays API movie-not-found errors (nytimes needs further testing)
     function displayErrorModal(msg)
     {
-        movieNotFoundModalEl.children(".modal-content").empty();
-        movieNotFoundModalEl.children(".modal-content").append(
+        $("#error-modal-content").empty();
+
+        $("#error-modal-content").append(
+            $("<button>", { "type": "button", "class": "btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline", "data-bs-dismiss": "modal", "aria-label":"Close" }),
             $("<span>", { "class": "close" }).html("&times;"),
-            $("<p>").text(msg)
+            $("<p>").text(msg),
+            $("<div>", { "class":"modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md"})
         );
-        movieNotFoundModalEl.css("display", "block");
-    }
 
-    function loadTriviaGame()
-    {
-        // Load next page. Ensure page loads in the same tab - sessionStorage does not persist across different tabs or windows
-    }
+        movieNotFoundModalEl.addClass("show").attr({ "style": "display: block;", "role": "dialog" });
 
-    function loadResults()
-    {
+        $("body").append(
+            $("<div>", { "class": "modal-backdrop fade show" }));
 
+        $("body").addClass("modal-open").attr({ "style": "overflow: hidden; padding-right: 17px;" });
     }
 
     // When a user searches for a movie use the '?s=' query parameter with callback to displayListOfMovies()
@@ -380,11 +371,9 @@ $(function ()
     })
 
 
-    modalButtonEl.on("click", function () { movieNotFoundModalEl.css("display", "block"); });
     movieNotFoundModalEl.on("click", ".close", function () { movieNotFoundModalEl.css("display", "none"); });
-    $(window).on("click", function (event) { if (event.target == movieNotFoundModalEl) { movieNotFoundModalEl.css("display", "none"); }; });
+    $(window).on("click", function (event) { if (event.target == movieNotFoundModalEl) { movieNotFoundModalEl.attr("display", "none"); }; });
     $("#load-trivia").on("click", function () { window.location = triviaURL });
-    $("#load-results").on("click", function () { window.location = resultsURL });
 
     checkForSessionProfile();
     displayFavorites();

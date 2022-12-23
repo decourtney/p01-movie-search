@@ -51,13 +51,11 @@
                             </div>
                         </li>
                         <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-white"
-                                id="home">Home</a></li>
+                                id="home-button">Home</a></li>
                         <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-white"
                                 id="television">Television</a></li>
                         <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-white"
                                 id="movies">Movies</a></li>
-                        <li><a class="lg:p-4 py-3 px-0 block border-b-2 border-transparent hover:border-white lg:mb-0 mb-2"
-                                id="login">Login</a></li>
                     </ul>
                 </nav>
             </div>
@@ -71,36 +69,25 @@
             </div>
         </section>
 
-        <section class="bg-tertiary m-4 px-2 py-8 grid place-content-center">
-            <section class="my-2" id="movie-poster">
-                <img src="../img/Placeholder.png" height="300" alt="picture of johnwick action movie">
-            </section>
+        <section id="trivia-section" class="bg-tertiary m-4 px-2 py-8 grid place-content-center">
+            <div class="my-2" id="movie-poster">
+                <img src="" height="300" alt="">
+            </div>
 
-            <div class="container" id="quiz">
+            <div class="container text-left">
                 <div>
-                    <h2 class="my-2 px-2 py-4 bg-background text-center" id="question">Question Placeholder</h2>
-                    <ul>
-                        <li class="bg-secondary">
-                            <input type="radio" name="answer" id="a" class="answer">
-                            <label for="a" id="a_text">answer</label>
-                        </li>
-                        <li class="bg-primary">
-                            <input type="radio" name="answer" id="b" class="answer">
-                            <label for="b" id="a_text">answer</label>
-                        </li>
-                        <li class="bg-secondary">
-                            <input type="radio" name="answer" id="c" class="answer">
-                            <label for="c" id="a_text">answer</label>
-                        </li>
-
-                        <li class="bg-primary">
-                            <input type="radio" name="answer" id="d" class="answer">
-                            <label for="d" id="a_text">answer</label>
-                        </li>
-                    </ul>
-
+                    <div id="question">
+                        <!-- Question Generated in JS -->
+                    </div>
+                    <div>
+                        <ul id="answers" class="bg-white rounded-lg border border-gray-200 w-96 text-gray-900">
+                            <!-- Answers Generated in JS -->
+                        </ul>
+                    </div>
                 </div>
-                <button class="bg-background my-2 p-2 rounded" id="submit">Submit</button>
+                <div id="trivia-buttons">
+                    <!-- Buttons Generated in JS -->
+                </div>
             </div>
         </section>
     </main>
