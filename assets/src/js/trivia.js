@@ -1,10 +1,5 @@
 $(function ()
 {
-    // Carry over functions to handle Nav bar functions
-    // Carry over functions to handle set/get to local and session storage 
-
-    // `http://www.omdbapi.com/?${searchArg}&type=movie&r=json&apikey=${omdbKey}`
-
     //Selectors
     let questionEl = $("#question");
     let answersEl = $("#answers");
@@ -14,7 +9,6 @@ $(function ()
 
     // Global Variables
     let omdbKey = "3e723361";
-    let nytimesKey = "Wv8CqWp1AwfoFBw2eqi5iK83OjGy3A7N";
     let homeURL = "../../../index.html"
     let index;
     let triviaObjs = []
@@ -37,8 +31,7 @@ $(function ()
             },
             error: function (xhr, status, error)
             {
-                // Needs error handling work
-                // displayErrorModal(xhr.status);
+                displayErrorModal(xhr.responseText);
             }
         });
     }
@@ -98,7 +91,6 @@ $(function ()
             }
         } else
         {
-            console.log("end")
             clearInterval(triviaTimer);
             timerEl.text("00");
         }
@@ -130,20 +122,13 @@ $(function ()
         if (answer.matches(".correct") === true)
         {
             // Do something when correct answer is selected
-            console.log("Correct answer selected");
 
         } else
         {
             // Do something when incorrect answer is selcted
-            console.log("Incorrect answer selected");
         }
 
         displayCorrectAnswer();
-    }
-
-    function displayHint()
-    {
-        // Maybe?
     }
 
     function displayCorrectAnswer()
@@ -153,141 +138,6 @@ $(function ()
 
         triviaButtonsEl.append($("<button>", { "id": "next-question", "class": "inline-block mx-2 px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out" }).text("Next Question"));
     }
-
-    // function requestAPI(url, infoCallback)
-    // {
-    //     $.ajax({
-    //         url: url,
-    //         type: "GET",
-    //         timeout: 5000,
-    //         success: function (data)
-    //         {
-    //             // OMDB returns True if a movie is found. NYTimes returns OK if found
-    //             if (data.Response == "True" || data.status == "OK")
-    //             {
-    //                 // Callback function
-    //                 infoCallback(data);
-    //             }
-    //         },
-    //         error: function (xhr, status, error)
-    //         {
-    //             // Needs error handling work
-    //             // displayErrorModal(xhr.status);
-    //         }
-    //     });
-    // }
-
-    // function createMovieObj(value)
-    // {
-    //     let movieObj = {
-    //         name: value.Title,
-    //         genre: value.Genre,
-    //         rated: value.Rated,
-    //         actors: value.Actors,
-    //         year: value.Year,
-    //         ratings: value.Ratings,
-    //         plot: value.Plot,
-    //         poster: value.Poster,
-    //         metascore: value.Metascore,
-    //         imdbRating: value.imdbRating,
-    //         review: ""
-    //     };
-
-    //     addToFavorites(movieObj);
-    // }
-
-    // function addToFavorites(obj)
-    // {
-    //     // Add the selected movie object to the profile favorites
-    //     let profile = getSessionStorage()[0];
-
-    //     // Make sure the movie title doesn
-    //     if (profile.favorites.length > 0)
-    //     {
-    //         for (let i = 0; i < profile.favorites.length; i++)
-    //         {
-    //             if (obj.name === profile.favorites[i].name)
-    //             {
-    //                 profile.favorites.splice(i, 1);
-    //             }
-    //         }
-
-    //         profile.favorites.push(obj);
-
-    //         // Now that the movie is added we have to reach out to nytimes for the review link
-    //         requestAPI(`https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=${obj.name.split(" ").join("+")}&api-key=${nytimesKey}`, addReviewToMovieObj);
-    //     } else
-    //     {
-    //         profile.favorites = [obj];
-    //     }
-
-    //     setLocalStorage(profile, profile.name);
-    // }
-
-    // function addReviewToMovieObj(value)
-    // {
-    //     if (value.results == null)
-    //     {
-    //         return;
-    //     }
-    //     let profile = getSessionStorage()[0];
-    //     console.log(profile.favorites)
-    //     // Because the movieobj is already stored we have to iterate through the stored movies
-    //     // And match the nytimes obj title with the stored movie title and add the review to that movieobj
-    //     profile.favorites.forEach(element =>
-    //     {
-    //         if (value.results[0].display_title === element.name)
-    //         {
-    //             element.review = value.results[0].link;
-    //             setLocalStorage(profile, profile.name);
-    //         }
-    //     })
-    // }
-
-    // function getSessionStorage()
-    // {
-    //     // After login - should use the current profile reference to get from localStorage
-    //     return getLocalStorage(JSON.parse(sessionStorage.getItem("currentProfile")));
-    // }
-
-    // function setSessionStorage(obj, storename)
-    // {
-    //     // Once data is set or updated to sessionStorage then also update/set localStorage
-    //     sessionStorage.clear();
-    //     sessionStorage.setItem(storename, JSON.stringify(obj));
-    // }
-
-    // function getLocalStorage(storeName)
-    // {
-    //     let storage = JSON.parse(localStorage.getItem(storeName));
-    //     return storage;
-    // }
-
-    // function setLocalStorage(obj, storeName)
-    // {
-    //     let storage = JSON.parse(localStorage.getItem(storeName));
-
-    //     // Check if storage is null. If so then this is the first element to be added so skip to else
-    //     if (storage)
-    //     {
-    //         // Iterate through the stored objects looking for duplicate entries. If a dupe is found
-    //         // then its removed and the new instance is added.
-    //         for (let i = 0; i < storage.length; i++)
-    //         {
-    //             if (obj.name === storage[i].name)
-    //             {
-    //                 storage.splice(i, 1);
-    //             }
-    //         }
-
-    //         storage.push(obj);
-    //     } else
-    //     {
-    //         storage = [obj];
-    //     }
-
-    //     localStorage.setItem(storeName, JSON.stringify(storage));
-    // }
 
 
     $("#home-button").on("click", function () { window.location = homeURL; })

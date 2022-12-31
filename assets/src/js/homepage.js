@@ -58,7 +58,6 @@ $(function ()
     function logInProfile(uname, pword)
     {
         let storedProfile = getLocalStorage(uname);
-        console.log(storedProfile)
         if (!storedProfile || storedProfile[0].password !== pword)
         {
             // Reload login modal with error message
@@ -76,7 +75,7 @@ $(function ()
 
     function addDefaultMovie()
     {
-        requestAPI(`http://www.omdbapi.com/?t=${defaultMovie}&type=movie&r=json&apikey=${omdbKey}`, createMovieObj);
+        requestAPI(`https://www.omdbapi.com/?t=${defaultMovie}&type=movie&r=json&apikey=${omdbKey}`, createMovieObj);
     }
 
     function displayFavorites()
@@ -193,8 +192,7 @@ $(function ()
             },
             error: function (xhr, status, error)
             {
-                // Needs error handling work
-                // displayErrorModal(xhr.status);
+                displayErrorModal(xhr.responseText);
             }
         });
     }
@@ -327,14 +325,14 @@ $(function ()
         {
             // Search Params: ?s= will return an array of up to 10 movies that has a matching pattern in the title.
             // Search Params: ?t= will return the first movie that matches the search pattern.
-            requestAPI(`http://www.omdbapi.com/?${searchArg}&type=movie&r=json&apikey=${omdbKey}`, displayListOfMovies);
+            requestAPI(`https://www.omdbapi.com/?${searchArg}&type=movie&r=json&apikey=${omdbKey}`, displayListOfMovies);
         }
     });
 
     movieListEl.on("click", "#movie-button", function (event)
     {
         let searchArg = "t=" + event.target.textContent.split("-")[1].trim();
-        requestAPI(`http://www.omdbapi.com/?${searchArg}&type=movie&r=json&apikey=${omdbKey}`, createMovieObj);
+        requestAPI(`https://www.omdbapi.com/?${searchArg}&type=movie&r=json&apikey=${omdbKey}`, createMovieObj);
     });
 
     loginButtonEl.on("click", function ()
