@@ -1,5 +1,3 @@
-import 'tw-elements';
-
 $(function ()
 {
     // Selectors
