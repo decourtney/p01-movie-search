@@ -4641,7 +4641,7 @@ textarea.form-control.is-invalid{
   color: rgb(224 135 106 / var(--tw-text-opacity));
 }
 
-#menu-toggle:checked + #menu {
+#menu-toggle:checked+#menu {
   display: block;
 }
 

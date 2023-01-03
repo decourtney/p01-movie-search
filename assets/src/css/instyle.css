@@ -8,6 +8,6 @@
     @apply border py-1 px-4 rounded-md cursor-pointer bg-yellow-50 text-primary tracking-wider border-r
 }
 
-#menu-toggle:checked + #menu {
-  display: block;
+#menu-toggle:checked+#menu {
+    display: block;
 }
