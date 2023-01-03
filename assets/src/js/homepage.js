@@ -270,7 +270,7 @@ $(function ()
     function displayErrorModal(msg)
     {
         $("#error-modal .modal-body").text(msg);
-        $("#error-modal").modal("show");
+        jQuery("#error-modal").modal("show");
     }
 
     function getSessionStorage()
