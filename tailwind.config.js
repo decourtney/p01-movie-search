@@ -3,7 +3,7 @@ module.exports = {
   content: [
     './assets/src/**/*.{html,js}',
     './index.html',
-    // './node_modules/tw-elements/dist/js/**/*.js'
+    './node_modules/tw-elements/dist/js/**/*.js'
   ],
   theme: {
     extend: {
@@ -21,5 +21,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tw-elements/dist/plugin')],
+  plugins: [require('./node_modules/tw-elements/dist/plugin')],
 }
