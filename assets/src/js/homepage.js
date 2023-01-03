@@ -1,5 +1,5 @@
-// Save features may change slightly. For now if the user searches for a movie it will be saved to their list
-// Will need to present the option to save a movie to their list
+import 'tw-elements';
+
 $(function ()
 {
     // Selectors
