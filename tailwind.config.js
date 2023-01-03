@@ -21,5 +21,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('./node_modules/tw-elements/dist/plugin')],
+  plugins: [require('tw-elements/dist/plugin.js')],
 }
